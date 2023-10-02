@@ -1,0 +1,502 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "OpenApi",
+        "version": "1.0"
+    },
+    "paths": {
+        "/Document/Search": {
+            "get": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Search any document corresponding to the query.\r\nAccept json type.",
+                "operationId": "SearchDocument",
+                "parameters": [
+                    {
+                        "name": "query",
+                        "in": "query",
+                        "style": "form",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchDocumentResult"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/Document/{documentId}": {
+            "get": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Get a spécific document.",
+                "operationId": "GetDocument",
+                "parameters": [
+                    {
+                        "name": "documentId",
+                        "in": "path",
+                        "required": true,
+                        "style": "simple",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DocumentStreamResult"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Update a spécific document.",
+                "operationId": "PutDocument",
+                "parameters": [
+                    {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "The document identifier.",
+                        "required": true,
+                        "style": "simple",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "The update request.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DocumentUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DocumentResult"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Remove a spécific document.",
+                "operationId": "PutDocument",
+                "parameters": [
+                    {
+                        "name": "documentId",
+                        "in": "path",
+                        "description": "The document identifier.",
+                        "required": true,
+                        "style": "simple",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DocumentResult"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/Document": {
+            "post": {
+                "tags": [
+                    "Document"
+                ],
+                "summary": "Posts a document.",
+                "operationId": "PostDocument",
+                "requestBody": {
+                    "description": "The document.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DocumentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DocumentResult"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "DocumentRequest": {
+                "type": "object",
+                "properties": {
+                    "dataAnnotation": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/StringStringKeyValuePair"
+                        },
+                        "description": "Gets or sets the data annotation.",
+                        "nullable": true
+                    },
+                    "documentName": {
+                        "type": "string",
+                        "description": "Gets or sets the name of the document.",
+                        "nullable": true
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "description": "Gets or sets the type of the document exemple Invoice, Shipping...",
+                        "nullable": true
+                    },
+                    "documentContent": {
+                        "$ref": "#/components/schemas/Stream"
+                    },
+                    "documentContentType": {
+                        "type": "string",
+                        "description": "Gets or sets the type of the document content.",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Document Request\r\n<seealso cref=\"T:OpenApi.Controllers.DocumentBase\" />"
+            },
+            "DocumentResult": {
+                "type": "object",
+                "properties": {
+                    "documentId": {
+                        "type": "string",
+                        "description": "Document identifier.",
+                        "format": "uuid"
+                    },
+                    "documentName": {
+                        "type": "string",
+                        "description": "Document name.",
+                        "nullable": true
+                    },
+                    "documentContent": {
+                        "$ref": "#/components/schemas/Stream"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "description": "Gets or sets the type of the document.",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Document Result"
+            },
+            "DocumentStreamResult": {
+                "type": "object",
+                "properties": {
+                    "documentId": {
+                        "type": "string",
+                        "description": "Document identifier.",
+                        "format": "uuid"
+                    },
+                    "documentName": {
+                        "type": "string",
+                        "description": "Document name.",
+                        "nullable": true
+                    },
+                    "documentContent": {
+                        "$ref": "#/components/schemas/Stream"
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Document Result"
+            },
+            "DocumentUpdateRequest": {
+                "type": "object",
+                "properties": {
+                    "documentName": {
+                        "type": "string",
+                        "description": "Gets or sets the name of the document.",
+                        "nullable": true
+                    },
+                    "documentType": {
+                        "type": "string",
+                        "description": "Gets or sets the type of the document exemple Invoice, Shipping...",
+                        "nullable": true
+                    },
+                    "documentContent": {
+                        "$ref": "#/components/schemas/Stream"
+                    },
+                    "documentContentType": {
+                        "type": "string",
+                        "description": "Gets or sets the type of the document content.",
+                        "nullable": true
+                    },
+                    "dataAnnotation": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/StringStringKeyValuePair"
+                        },
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Request for update document.\r\nA this date only dataannotation can be updated."
+            },
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "nullable": true
+                        },
+                        "nullable": true,
+                        "readOnly": true
+                    },
+                    "reasons": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/IError"
+                        },
+                        "nullable": true,
+                        "readOnly": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "IError": {
+                "type": "object",
+                "properties": {
+                    "reasons": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/IError"
+                        },
+                        "nullable": true,
+                        "readOnly": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "nullable": true,
+                        "readOnly": true
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "nullable": true
+                        },
+                        "nullable": true,
+                        "readOnly": true
+                    }
+                },
+                "additionalProperties": false
+            },
+            "SearchDocumentResult": {
+                "type": "object",
+                "properties": {
+                    "pagination": {
+                        "$ref": "#/components/schemas/SearchPagination"
+                    },
+                    "documents": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DocumentResult"
+                        },
+                        "description": "List of documents corresponding to the query.",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Information about a search of document."
+            },
+            "SearchPagination": {
+                "type": "object",
+                "properties": {
+                    "page": {
+                        "type": "integer",
+                        "description": "the numeber of current page.",
+                        "format": "int32"
+                    },
+                    "pageSize": {
+                        "type": "integer",
+                        "description": "the number of document by page.",
+                        "format": "int32"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "description": "the total number of pages.",
+                        "format": "int32"
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Object representing the pagination information."
+            },
+            "Stream": {
+                "type": "object",
+                "properties": {
+                    "canRead": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "canWrite": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "canSeek": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "canTimeout": {
+                        "type": "boolean",
+                        "readOnly": true
+                    },
+                    "length": {
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "position": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "readTimeout": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "writeTimeout": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                },
+                "additionalProperties": false
+            },
+            "StringStringKeyValuePair": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "value": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    }
+}
